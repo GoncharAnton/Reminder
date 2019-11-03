@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Reminder</string>
+    <string name="activity_main_descriptionForEditTextWithReminder">Enter reminder message</string>
+    <string name="activity_main_descriptionForEditTextWithTimeValue">Enter time value (in minutes)</string>
+    <string name="MainActivity_checkUserValue_method_fillReminderMessage">Empty reminder message\nEnter message</string>
+    <string name="MainActivity_checkUserValue_method_fillTimeValue">Empty time value\nEnter time value</string>
+    <string name="activity_main_switchLabel">Enable notification</string>
+    <string name="MyService_onStartCommand_method_messageText">Reminder is enable</string>
+    <string name="MyService_onDestroy_method_messageText">Reminder is disabled</string>
+    <string name="MainActivity_onClick_method_forOffButton_noActiveService">No active service</string>
+</resources>
