@@ -6,78 +6,75 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="@string/activity_main_switchLabel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/reminderMessage"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginLeft="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginEnd="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginRight="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginBottom="@dimen/minIndent_activity_main_minIndentBetweenElement_24sp"
-        android:ems="10"
-        android:hint="@string/activity_main_descriptionForEditTextWithReminder"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/switch1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="AutoFill"
-        />
-
-    <EditText
-        android:id="@+id/timeValue"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginLeft="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginTop="@dimen/minIndent_activity_main_minIndentBetweenElement_24sp"
-        android:layout_marginEnd="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginRight="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:ems="10"
-        android:hint="@string/activity_main_descriptionForEditTextWithTimeValue"
-        android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1"
-        tools:ignore="AutoFill" />
-
     <Button
         android:id="@+id/off_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginBottom="80dp"
-        android:background="#E70707"
-        android:text="off"
-        android:textColorLink="#F30500"
-        app:layout_constraintBottom_toTopOf="@+id/timeValue"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginEnd="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        android:layout_marginBottom="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        android:background="@drawable/off_button_gradient"
+        android:onClick="onClickForOffButton"
+        android:text="@string/activity_main_offButtonLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="RtlHardcoded" />
 
     <Button
         android:id="@+id/on_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
-        android:layout_marginBottom="80dp"
-        android:background="#56CA17"
-        android:text="on"
-        android:textColorLink="#069B0E"
-        app:layout_constraintBottom_toTopOf="@+id/timeValue"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginStart="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        android:layout_marginBottom="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        android:background="@drawable/on_button_gradient"
+        android:onClick="onCLickForOnButton"
+        android:text="@string/activity_main_onButtonLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="RtlHardcoded" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/reminderMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        android:layout_marginTop="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        android:layout_marginEnd="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reminderMessageEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/activity_main_descriptionForEditTextWithReminder"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/timeValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        android:layout_marginEnd="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        app:layout_constraintBottom_toTopOf="@+id/off_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reminderMessage">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/timeValueEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/activity_main_descriptionForEditTextWithTimeValue"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
