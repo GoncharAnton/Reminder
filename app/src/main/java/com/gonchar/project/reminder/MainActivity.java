@@ -3,14 +3,10 @@ package com.gonchar.project.reminder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.gonchar.project.reminder.utils.Tools;
 import com.google.android.material.textfield.TextInputLayout;
@@ -19,34 +15,23 @@ import java.util.Objects;
 
 import static com.gonchar.project.reminder.utils.Constants.*;
 
+
 public class MainActivity extends AppCompatActivity {
 
 
-    TextInputLayout reminderMessage;
-    TextInputLayout timeValue;
-    Button offButton;
-    Button onButton;
-    Context context;
+    private TextInputLayout reminderMessage;
+    private TextInputLayout timeValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        offButton = findViewById(R.id.off_button);
-        onButton = findViewById(R.id.on_button);
-
         reminderMessage = findViewById(R.id.reminderMessage);
         timeValue = findViewById(R.id.timeValue);
-        context = this;
 
-    }
+        Tools.makeCustomToolBar(Objects.requireNonNull(getSupportActionBar()));
 
-
-    private void writeMessage(String message) {
-        Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
     }
 
 
@@ -67,39 +52,43 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickForOffButton(View view) {
-
-        if(Tools.checkServiceRunning(ReminderService.class.getName(), context)){
+        if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
             stopService(new Intent(view.getContext(), ReminderService.class));
-            writeMessage(getString(R.string.MainActivity_onClickForOffButton_method_serviceIsStopped));
-
-        } else {
-            writeMessage(getString(R.string.MainActivity_onClick_method_forOffButton_noActiveService));
         }
     }
 
 
     public void onCLickForOnButton(View view) {
+        if (!Tools.isEmptyMessage(timeValue.getEditText().getText().toString()) ||
+                !Tools.shouldShowError(MIN_TIME_VALUE, Integer.parseInt(timeValue.getEditText().getText().toString()))) {
+            timeValue.getEditText().setText("1");
 
-        if(!Tools.isEmptyMessage(reminderMessage.getEditText().getText().toString())
-                && !Tools.isEmptyMessage(timeValue.getEditText().getText().toString())
-                && !Tools.checkServiceRunning(ReminderService.class.getName(), context)){
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(new Intent(view.getContext(), ReminderService.class)
-                        .putExtra(EXTRAS_MESSAGE_KEY, Objects.requireNonNull(reminderMessage.getEditText()).getText())
-                        .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(Objects.requireNonNull(timeValue.getEditText()).getText().toString())));
-                writeMessage(getString(R.string.MainActivity_onClickForOnButton_method_serviceIsStarted));
-
-            } else {
-                startService(new Intent(view.getContext(), ReminderService.class)
-                        .putExtra(EXTRAS_MESSAGE_KEY, reminderMessage.getEditText().getText())
-                        .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(timeValue.getEditText().getText().toString())));
-                writeMessage(getString(R.string.MainActivity_onClickForOnButton_method_serviceIsStarted));
-            }
-
-        }else{
-            writeMessage(getString(R.string.MainActivity_onCLickForOnButton_method_notAllFieldsAreFilled));
         }
+        if (Tools.shouldShowError(reminderMessage.getEditText().length(), MIN_MESSAGE_LENGTH)) {
+            Tools.showError(getText(R.string.MainActivity_showError_method_Error).toString(),reminderMessage);
+
+        } else if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
+            stopService(new Intent(view.getContext(), ReminderService.class));
+            startReminderService(view);
+
+        } else {
+            startReminderService(view);
+        }
+    }
+
+    public void startReminderService(View view) {
+        Tools.showError(null, reminderMessage);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(view.getContext(), ReminderService.class)
+                    .putExtra(EXTRAS_MESSAGE_KEY, Objects.requireNonNull(reminderMessage.getEditText()).getText())
+                    .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(Objects.requireNonNull(timeValue.getEditText()).getText().toString())));
+
+        } else {
+            startService(new Intent(view.getContext(), ReminderService.class)
+                    .putExtra(EXTRAS_MESSAGE_KEY, reminderMessage.getEditText().getText())
+                    .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(timeValue.getEditText().getText().toString())));
+        }
+
     }
 
 }

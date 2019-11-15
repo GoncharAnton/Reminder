@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Reminder</string>
     <string name="activity_main_descriptionForEditTextWithReminder">Enter reminder message</string>
@@ -10,4 +11,5 @@
     <string name="activity_main_offButtonLabel">Off</string>
     <string name="MainActivity_onClickForOffButton_method_serviceIsStopped">Service is stopped</string>
     <string name="MainActivity_onClickForOnButton_method_serviceIsStarted">Service is started</string>
+    <string name="MainActivity_showError_method_Error">wrong text length</string>
 </resources>

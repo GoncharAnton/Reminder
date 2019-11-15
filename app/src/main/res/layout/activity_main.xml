@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
+
     <Button
         android:id="@+id/off_button"
         android:layout_width="wrap_content"
@@ -19,7 +22,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="RtlHardcoded" />
+        tools:ignore="RtlHardcoded"
+        android:theme="@style/buttonStyle"/>
 
     <Button
         android:id="@+id/on_button"
@@ -34,7 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="RtlHardcoded" />
+        tools:ignore="RtlHardcoded"
+        android:theme="@style/buttonStyle"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/reminderMessage"
@@ -43,6 +48,7 @@
         android:layout_marginStart="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
         android:layout_marginTop="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
         android:layout_marginEnd="@dimen/IndentFromEdge_activity_main_indentFromTheEdgeOfApp_32sp"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -53,7 +59,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/activity_main_descriptionForEditTextWithReminder"
-            android:inputType="text" />
+            android:inputType="text"
+            android:maxLines="1"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,6 +82,7 @@
             android:hint="@string/activity_main_descriptionForEditTextWithTimeValue"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
