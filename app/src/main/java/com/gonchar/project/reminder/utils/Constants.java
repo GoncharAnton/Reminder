@@ -16,4 +16,8 @@ public class Constants {
 
     public static final String SERVICE_CHANNEL_DESCRIPTION = "notification channel (delivery reminder)";
 
+    public static  final int MIN_MESSAGE_LENGTH = 4;
+
+    public static final int MIN_TIME_VALUE = 1;
+
 }

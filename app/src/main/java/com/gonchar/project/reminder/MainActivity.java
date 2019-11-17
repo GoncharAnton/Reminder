@@ -59,12 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onCLickForOnButton(View view) {
-        if (!Tools.isEmptyMessage(timeValue.getEditText().getText().toString()) ||
-                !Tools.shouldShowError(MIN_TIME_VALUE, Integer.parseInt(timeValue.getEditText().getText().toString()))) {
+        if (Tools.isEmptyMessage(timeValue.getEditText().getText().toString()) ||
+                Tools.shouldShowError(MIN_TIME_VALUE, Integer.parseInt(timeValue.getEditText().getText().toString()))) {
+
             timeValue.getEditText().setText("1");
 
         }
-        if (Tools.shouldShowError(reminderMessage.getEditText().length(), MIN_MESSAGE_LENGTH)) {
+        if (Tools.shouldShowError(MIN_MESSAGE_LENGTH ,reminderMessage.getEditText().length())) {
             Tools.showError(getText(R.string.MainActivity_showError_method_Error).toString(),reminderMessage);
 
         } else if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
@@ -78,15 +79,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void startReminderService(View view) {
         Tools.showError(null, reminderMessage);
+        Intent intent = new Intent(view.getContext(), ReminderService.class)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                .putExtra(EXTRAS_MESSAGE_KEY, Objects.requireNonNull(reminderMessage.getEditText()).getText())
+                .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(Objects.requireNonNull(timeValue.getEditText()).getText().toString()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(view.getContext(), ReminderService.class)
-                    .putExtra(EXTRAS_MESSAGE_KEY, Objects.requireNonNull(reminderMessage.getEditText()).getText())
-                    .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(Objects.requireNonNull(timeValue.getEditText()).getText().toString())));
+            startForegroundService(intent);
 
         } else {
-            startService(new Intent(view.getContext(), ReminderService.class)
-                    .putExtra(EXTRAS_MESSAGE_KEY, reminderMessage.getEditText().getText())
-                    .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(timeValue.getEditText().getText().toString())));
+            startService(intent);
         }
 
     }

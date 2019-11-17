@@ -9,7 +9,7 @@
 
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/off_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         tools:ignore="RtlHardcoded"
         android:theme="@style/buttonStyle"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/on_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
