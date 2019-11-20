@@ -59,26 +59,46 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onCLickForOnButton(View view) {
+
         if (Tools.isEmptyMessage(timeValue.getEditText().getText().toString()) ||
                 Tools.shouldShowError(MIN_TIME_VALUE, Integer.parseInt(timeValue.getEditText().getText().toString()))) {
-
-            timeValue.getEditText().setText("1");
-
+            Tools.showError(getText(R.string.MainActivity_onClickForOnButton_argumentInShowErrorMethod_timeValueError).toString(), timeValue);
+            Tools.showError(null, reminderMessage);
+        } else if (Tools.shouldShowError(MIN_MESSAGE_LENGTH, reminderMessage.getEditText().length())) {
+            Tools.showError(getText(R.string.MainActivity_showError_method_Error).toString(), reminderMessage);
+            Tools.showError(null, timeValue);
+        } else {
+            serviceCheck(view);
         }
-        if (Tools.shouldShowError(MIN_MESSAGE_LENGTH ,reminderMessage.getEditText().length())) {
-            Tools.showError(getText(R.string.MainActivity_showError_method_Error).toString(),reminderMessage);
+    }
 
-        } else if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
+
+    /**
+     * this method start or restart reminder service (check service, is it work in this moment or not)
+     * if service is working - calls the stopService method (stop service) then startReminderService
+     * method (start with new parameters), if service ist work - calls the tartReminderService method
+     * (start with new parameters)
+     *
+     * @param view object with user interface
+     */
+    private void serviceCheck(View view) {
+
+        if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
             stopService(new Intent(view.getContext(), ReminderService.class));
             startReminderService(view);
-
         } else {
             startReminderService(view);
         }
     }
 
+    /**
+     * this method delete all error message, create new intent object and start reminder service
+     * @param view object with user interface
+     */
     public void startReminderService(View view) {
+
         Tools.showError(null, reminderMessage);
+        Tools.showError(null, timeValue);
         Intent intent = new Intent(view.getContext(), ReminderService.class)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(EXTRAS_MESSAGE_KEY, Objects.requireNonNull(reminderMessage.getEditText()).getText())
@@ -89,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startService(intent);
         }
-
     }
 
 }

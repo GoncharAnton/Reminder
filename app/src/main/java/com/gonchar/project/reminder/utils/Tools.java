@@ -56,10 +56,10 @@ public class Tools {
     /**
      * this method print error message under reminderMessage field
      * @param errorMessage it is string with error message
-     * @param reminderMessage TextInputLayout value (reminderMessage field)
+     * @param InputLayout TextInputLayout value (reminderMessage or timeValue field)
      */
-    public static void showError(String errorMessage, TextInputLayout reminderMessage) {
-        reminderMessage.setError(errorMessage);
+    public static void showError(String errorMessage, TextInputLayout InputLayout) {
+        InputLayout.setError(errorMessage);
     }
 
     /**
