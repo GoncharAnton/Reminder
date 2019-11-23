@@ -5,7 +5,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 
@@ -25,6 +27,7 @@ public class ReminderService extends Service {
 
     private Notification userReminder;
     Timer reminderMessage = new Timer();
+    private NotificationChannel channel = null;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -87,7 +90,7 @@ public class ReminderService extends Service {
 
         Notification.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder = new Notification.Builder(getApplicationContext(), "channel_id");
+            builder = new Notification.Builder(getApplicationContext(), initNotificationChannel().getId());
         } else {
             builder = new Notification.Builder(this);
         }
@@ -104,29 +107,41 @@ public class ReminderService extends Service {
      */
     private Notification createReminder(PendingIntent secondPedIntent, Intent intent) {
 
-        return new NotificationCompat.Builder(getApplicationContext(), ID)
+        Notification.Builder reminder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setDescription(NOTIFICATION_CHANNEL_DESCRIPTION);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLUE);
+            NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+            reminder = new Notification.Builder(getApplicationContext(), notificationChannel.getId());
+        }else{
+            reminder = new Notification.Builder(this);
+        }
+        return reminder
                 .setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(intent.getCharSequenceExtra(EXTRAS_MESSAGE_KEY))
                 .setContentIntent(secondPedIntent)
-                .setChannelId("channel_id")
-                .setAutoCancel(true).build();
+                .build();
     }
 
 
     private NotificationChannel initNotificationChannel() {
 
-        NotificationChannel channel = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             channel = new NotificationChannel(SERVICE_CHANNEL_ID,
-                    SERVICE_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                    SERVICE_CHANNEL_NAME, NotificationManager.IMPORTANCE_NONE);
             channel.setDescription(SERVICE_CHANNEL_DESCRIPTION);
             channel.enableLights(true);
             channel.enableVibration(false);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert manager != null;
+            manager.createNotificationChannel(channel);
         }
         return channel;
     }
-
 
     /**
      * this method stop this service

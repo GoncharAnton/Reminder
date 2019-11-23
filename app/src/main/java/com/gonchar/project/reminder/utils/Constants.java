@@ -12,9 +12,15 @@ public class Constants {
 
     public static final String SERVICE_CHANNEL_ID = "channel_id_first";
 
-    public static final String SERVICE_CHANNEL_NAME = "delivery reminder";
+    public static final String SERVICE_CHANNEL_NAME = "delivery service reminder";
 
-    public static final String SERVICE_CHANNEL_DESCRIPTION = "notification channel (delivery reminder)";
+    public static final String SERVICE_CHANNEL_DESCRIPTION = "service channel (delivery message about background service)";
+
+    public static final String NOTIFICATION_CHANNEL_ID = "channel_id_second";
+
+    public static final String NOTIFICATION_CHANNEL_NAME = "delivery user reminder";
+
+    public static final String NOTIFICATION_CHANNEL_DESCRIPTION = "notification channel (delivery user reminder)";
 
     public static  final int MIN_MESSAGE_LENGTH = 4;
 
