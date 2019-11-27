@@ -4,23 +4,23 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.RemoteInput;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
 
-
 import java.util.*;
 
-
+import static android.content.Intent.ACTION_ANSWER;
 import static android.content.Intent.FILL_IN_ACTION;
 import static com.gonchar.project.reminder.utils.Constants.*;
-
-import static android.os.Build.ID;
 
 public class ReminderService extends Service {
 
@@ -81,8 +81,10 @@ public class ReminderService extends Service {
 
         Intent handleClick = new Intent(this, MainActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        handleClick.setAction(ACTION_ANSWER);
+        handleClick.putExtra(QUICK_NOTIFICATION_CHANGE, 123);
         return PendingIntent.getActivity(getApplicationContext(),
-                0, handleClick, FILL_IN_ACTION);
+                123, handleClick, FILL_IN_ACTION);
     }
 
 
@@ -115,9 +117,43 @@ public class ReminderService extends Service {
             notificationChannel.setLightColor(Color.BLUE);
             NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
+
             reminder = new Notification.Builder(getApplicationContext(), notificationChannel.getId());
+
+            // change notification without create new activity or without opening already created activity
+           /* //_____________________________________________________________________________________________
+
+            android.app.RemoteInput userInput = new RemoteInput.Builder(REMOTE_KEY)
+                    .setLabel("Change message")
+                    .build();
+
+            Notification.Action notificationButton = new Notification.Action.Builder
+                    (R.mipmap.ic_error_outline_black_18dp,"Change message",createReminderIntent())
+                    .addRemoteInput(userInput)
+                    .build();
+
+
+            reminder = new Notification.Builder(getApplicationContext(), notificationChannel.getId())
+            .addAction(notificationButton);
+
+
+            if (intent.getAction() != null) {
+                intent.putExtra(EXTRAS_MESSAGE_KEY,"11111111111111");
+                userReminder = createReminder(createReminderIntent(), intent);
+                initTimer(createTimerTask(),intent);
+                createReminder(secondPedIntent, intent);
+                return reminder.setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(intent.getCharSequenceExtra("11111111111111"))
+                        .setContentIntent(secondPedIntent)
+                        .build();
+            }
+            //_____________________________________________________________________________________________*/
+
+
         }else{
             reminder = new Notification.Builder(this);
+
         }
         return reminder
                 .setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
@@ -125,7 +161,19 @@ public class ReminderService extends Service {
                 .setContentText(intent.getCharSequenceExtra(EXTRAS_MESSAGE_KEY))
                 .setContentIntent(secondPedIntent)
                 .build();
+
+
     }
+
+
+
+
+
+
+
+
+
+
 
 
     private NotificationChannel initNotificationChannel() {

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -21,17 +22,33 @@ public class MainActivity extends AppCompatActivity {
 
     private TextInputLayout reminderMessage;
     private TextInputLayout timeValue;
+    private SharedPreferences userVariable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Tools.makeCustomToolBar(Objects.requireNonNull(getSupportActionBar()));
 
         reminderMessage = findViewById(R.id.reminderMessage);
         timeValue = findViewById(R.id.timeValue);
+        checkUserSetting();
 
-        Tools.makeCustomToolBar(Objects.requireNonNull(getSupportActionBar()));
 
+    }
+
+    /**
+     *  this method rewrite text field in TextInputLayouts reminderMessage and timeValue if application
+     *  wos closet but service wos`t stop
+     */
+    private void checkUserSetting() {
+        userVariable = getSharedPreferences("userVar", MODE_PRIVATE);
+        if(userVariable.contains(USER_SETINGS_REMINDER_KEY)){
+            reminderMessage.getEditText().setText(userVariable.getString(USER_SETINGS_REMINDER_KEY,""));
+        }
+        if (userVariable.contains(USER_SETING_TIME_VALUE_KEY)) {
+            timeValue.getEditText().setText(userVariable.getString(USER_SETING_TIME_VALUE_KEY,""));
+        }
     }
 
 
@@ -53,8 +70,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickForOffButton(View view) {
         if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
+            changeUserSetting("","");
             stopService(new Intent(view.getContext(), ReminderService.class));
         }
+    }
+
+    /**
+     * this method save user settings (text  rom text fields in reminderMassage and timeValue)
+     * @param newReminder last variant from user or empty string if method coll in onClickForOffButton method
+     * @param newTimeValue last variant from user or empty string if method coll in onClickForOffButton method
+     */
+    private void changeUserSetting(String newReminder, String newTimeValue) {
+        SharedPreferences.Editor editor = userVariable.edit();
+        editor.putString(USER_SETINGS_REMINDER_KEY,newReminder);
+        editor.putString(USER_SETING_TIME_VALUE_KEY,newTimeValue);
+        editor.apply();
     }
 
 
@@ -72,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * this method start or restart reminder service (check service, is it work in this moment or not)
      * if service is working - calls the stopService method (stop service) then startReminderService
@@ -87,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
             stopService(new Intent(view.getContext(), ReminderService.class));
             startReminderService(view);
         } else {
+            changeUserSetting(reminderMessage.getEditText().getText().toString(),
+                    timeValue.getEditText().getText().toString());
             startReminderService(view);
         }
     }

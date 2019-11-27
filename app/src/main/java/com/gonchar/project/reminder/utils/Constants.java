@@ -26,4 +26,12 @@ public class Constants {
 
     public static final int MIN_TIME_VALUE = 1;
 
+    public static final String QUICK_NOTIFICATION_CHANGE = "quickChange";
+
+    public static final String REMOTE_KEY = "remoteInputKey";
+
+    public static final String USER_SETINGS_REMINDER_KEY = "sharedPreferencesReminderKey";
+
+    public static final String USER_SETING_TIME_VALUE_KEY = "sharedPreferencesTimeValueKey";
+
 }
