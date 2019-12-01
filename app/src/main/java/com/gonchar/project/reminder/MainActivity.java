@@ -43,11 +43,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private void checkUserSetting() {
         userVariable = getSharedPreferences("userVar", MODE_PRIVATE);
-        if(userVariable.contains(USER_SETINGS_REMINDER_KEY)){
-            reminderMessage.getEditText().setText(userVariable.getString(USER_SETINGS_REMINDER_KEY,""));
+        if(userVariable.contains(SHARED_PREFERENCES_REMINDER_KEY)){
+            reminderMessage.getEditText().setText(userVariable.getString(SHARED_PREFERENCES_REMINDER_KEY,""));
         }
-        if (userVariable.contains(USER_SETING_TIME_VALUE_KEY)) {
-            timeValue.getEditText().setText(userVariable.getString(USER_SETING_TIME_VALUE_KEY,""));
+        if (userVariable.contains(USER_SETTING_TIME_VALUE_KEY)) {
+            timeValue.getEditText().setText(userVariable.getString(USER_SETTING_TIME_VALUE_KEY,""));
         }
     }
 
@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void changeUserSetting(String newReminder, String newTimeValue) {
         SharedPreferences.Editor editor = userVariable.edit();
-        editor.putString(USER_SETINGS_REMINDER_KEY,newReminder);
-        editor.putString(USER_SETING_TIME_VALUE_KEY,newTimeValue);
+        editor.putString(SHARED_PREFERENCES_REMINDER_KEY,newReminder);
+        editor.putString(USER_SETTING_TIME_VALUE_KEY,newTimeValue);
         editor.apply();
     }
 

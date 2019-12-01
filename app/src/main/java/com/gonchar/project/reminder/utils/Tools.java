@@ -1,26 +1,15 @@
 package com.gonchar.project.reminder.utils;
 
 import android.app.ActivityManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.appcompat.app.ActionBar;
 
-import com.gonchar.project.reminder.MainActivity;
 import com.gonchar.project.reminder.R;
-import com.gonchar.project.reminder.ReminderService;
 import com.google.android.material.textfield.TextInputLayout;
 
 
 import static android.content.Context.ACTIVITY_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
-import static com.gonchar.project.reminder.utils.Constants.SERVICE_CHANNEL_DESCRIPTION;
-import static com.gonchar.project.reminder.utils.Constants.SERVICE_CHANNEL_ID;
-import static com.gonchar.project.reminder.utils.Constants.SERVICE_CHANNEL_NAME;
-import static com.gonchar.project.reminder.utils.Constants.USER_SETINGS_REMINDER_KEY;
-import static com.gonchar.project.reminder.utils.Constants.USER_SETING_TIME_VALUE_KEY;
 
 public class Tools {
 

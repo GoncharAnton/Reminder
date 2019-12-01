@@ -30,8 +30,8 @@ public class Constants {
 
     public static final String REMOTE_KEY = "remoteInputKey";
 
-    public static final String USER_SETINGS_REMINDER_KEY = "sharedPreferencesReminderKey";
+    public static final String SHARED_PREFERENCES_REMINDER_KEY = "sharedPreferencesReminderKey";
 
-    public static final String USER_SETING_TIME_VALUE_KEY = "sharedPreferencesTimeValueKey";
+    public static final String USER_SETTING_TIME_VALUE_KEY = "sharedPreferencesTimeValueKey";
 
 }

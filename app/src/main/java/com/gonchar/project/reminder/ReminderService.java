@@ -4,9 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.RemoteInput;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.RemoteInput;
 
 import java.util.*;
 
@@ -70,8 +69,6 @@ public class ReminderService extends Service {
         };
     }
 
-
-
     /**
      * this method create new pending intent (used for created notification (reminder message))
      *
@@ -96,7 +93,8 @@ public class ReminderService extends Service {
         } else {
             builder = new Notification.Builder(this);
         }
-        builder.setContentTitle(getString(R.string.app_name)).setAutoCancel(true);
+        builder.setContentTitle(getString(R.string.app_name))
+                .setAutoCancel(true);
         startForeground(1, builder.build());
     }
 
@@ -109,7 +107,7 @@ public class ReminderService extends Service {
      */
     private Notification createReminder(PendingIntent secondPedIntent, Intent intent) {
 
-        Notification.Builder reminder;
+        NotificationCompat.Builder reminder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setDescription(NOTIFICATION_CHANNEL_DESCRIPTION);
@@ -117,28 +115,31 @@ public class ReminderService extends Service {
             notificationChannel.setLightColor(Color.BLUE);
             NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
+            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId());
 
-            reminder = new Notification.Builder(getApplicationContext(), notificationChannel.getId());
+
 
             // change notification without create new activity or without opening already created activity
-           /* //_____________________________________________________________________________________________
+            //_this part dose`t work yet____________________________________________________________________________________________
 
-            android.app.RemoteInput userInput = new RemoteInput.Builder(REMOTE_KEY)
-                    .setLabel("Change message")
-                    .build();
 
-            Notification.Action notificationButton = new Notification.Action.Builder
+            /*RemoteInput userInput = new RemoteInput.Builder(REMOTE_KEY)
+                    .setLabel("Change message").build();
+
+
+            NotificationCompat.Action notificationButton = new NotificationCompat.Action.Builder
                     (R.mipmap.ic_error_outline_black_18dp,"Change message",createReminderIntent())
                     .addRemoteInput(userInput)
                     .build();
 
 
-            reminder = new Notification.Builder(getApplicationContext(), notificationChannel.getId())
+
+            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId())
             .addAction(notificationButton);
 
-
+            Bundle resulr = RemoteInput.getResultsFromIntent(intent);
             if (intent.getAction() != null) {
-                intent.putExtra(EXTRAS_MESSAGE_KEY,"11111111111111");
+                        intent.putExtra(EXTRAS_MESSAGE_KEY,"11111111111111");
                 userReminder = createReminder(createReminderIntent(), intent);
                 initTimer(createTimerTask(),intent);
                 createReminder(secondPedIntent, intent);
@@ -147,13 +148,14 @@ public class ReminderService extends Service {
                         .setContentText(intent.getCharSequenceExtra("11111111111111"))
                         .setContentIntent(secondPedIntent)
                         .build();
-            }
-            //_____________________________________________________________________________________________*/
+            }*/
+            //_____________________________________________________________________________________________
+
+
 
 
         }else{
-            reminder = new Notification.Builder(this);
-
+            reminder = new NotificationCompat.Builder(getApplicationContext());
         }
         return reminder
                 .setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
@@ -162,19 +164,7 @@ public class ReminderService extends Service {
                 .setContentIntent(secondPedIntent)
                 .build();
 
-
     }
-
-
-
-
-
-
-
-
-
-
-
 
     private NotificationChannel initNotificationChannel() {
 
