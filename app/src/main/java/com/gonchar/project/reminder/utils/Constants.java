@@ -6,7 +6,7 @@ public class Constants {
 
     public static final String EXTRAS_TIME_VALUE_KEY = "time";
 
-    public static final int DEFAULT_TIME_VALUE = 1000;
+    public static final int DEFAULT_TIME_VALUE = 10;
 
     public static final int COEFFICIENT_FOR_CONVERT_MS_IN_SEC = 1000;
 
@@ -22,7 +22,7 @@ public class Constants {
 
     public static final String NOTIFICATION_CHANNEL_DESCRIPTION = "notification channel (delivery user reminder)";
 
-    public static  final int MIN_MESSAGE_LENGTH = 4;
+    public static final int MIN_MESSAGE_LENGTH = 4;
 
     public static final int MIN_TIME_VALUE = 1;
 

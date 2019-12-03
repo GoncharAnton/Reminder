@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 
 import com.gonchar.project.reminder.utils.Tools;
@@ -33,21 +35,45 @@ public class MainActivity extends AppCompatActivity {
         reminderMessage = findViewById(R.id.reminderMessage);
         timeValue = findViewById(R.id.timeValue);
         checkUserSetting();
-
+        reminderMessage.getEditText().addTextChangedListener(counter);
 
     }
 
+
     /**
-     *  this method rewrite text field in TextInputLayouts reminderMessage and timeValue if application
-     *  wos closet but service wos`t stop
+     * this object - (listener) check length of the reminder message (in field, which user fill).
+     */
+    TextWatcher counter = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (reminderMessage.getEditText().length() < MIN_MESSAGE_LENGTH) {
+                Tools.showError(getText(R.string.MainActivity_showError_method_Error).toString(), reminderMessage);
+            } else {
+                Tools.showError(null, reminderMessage);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    /**
+     * this method rewrite text field in TextInputLayouts reminderMessage and timeValue if application
+     * wos closet but service wos`t stop
      */
     private void checkUserSetting() {
         userVariable = getSharedPreferences("userVar", MODE_PRIVATE);
-        if(userVariable.contains(SHARED_PREFERENCES_REMINDER_KEY)){
-            reminderMessage.getEditText().setText(userVariable.getString(SHARED_PREFERENCES_REMINDER_KEY,""));
+
+        if (userVariable.contains(SHARED_PREFERENCES_REMINDER_KEY)) {
+            reminderMessage.getEditText().setText(userVariable.getString(SHARED_PREFERENCES_REMINDER_KEY, ""));
         }
         if (userVariable.contains(USER_SETTING_TIME_VALUE_KEY)) {
-            timeValue.getEditText().setText(userVariable.getString(USER_SETTING_TIME_VALUE_KEY,""));
+            timeValue.getEditText().setText(userVariable.getString(USER_SETTING_TIME_VALUE_KEY, ""));
         }
     }
 
@@ -70,21 +96,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickForOffButton(View view) {
         if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
-            changeUserSetting("","");
+            changeUserSetting("", "");
             stopService(new Intent(view.getContext(), ReminderService.class));
         }
     }
 
     /**
      * this method save user settings (text  rom text fields in reminderMassage and timeValue)
-     * @param newReminder last variant from user or empty string if method coll in onClickForOffButton method
+     *
+     * @param newReminder  last variant from user or empty string if method coll in onClickForOffButton method
      * @param newTimeValue last variant from user or empty string if method coll in onClickForOffButton method
      */
-    private void changeUserSetting(String newReminder, String newTimeValue) {
+    void changeUserSetting(String newReminder, String newTimeValue) {
         SharedPreferences.Editor editor = userVariable.edit();
-        editor.putString(SHARED_PREFERENCES_REMINDER_KEY,newReminder);
-        editor.putString(USER_SETTING_TIME_VALUE_KEY,newTimeValue);
+        editor.putString(SHARED_PREFERENCES_REMINDER_KEY, newReminder);
+        editor.putString(USER_SETTING_TIME_VALUE_KEY, newTimeValue);
         editor.apply();
+
     }
 
 
@@ -95,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             Tools.showError(getText(R.string.MainActivity_onClickForOnButton_argumentInShowErrorMethod_timeValueError).toString(), timeValue);
             Tools.showError(null, reminderMessage);
         } else if (Tools.shouldShowError(MIN_MESSAGE_LENGTH, reminderMessage.getEditText().length())) {
-            Tools.showError(getText(R.string.MainActivity_showError_method_Error).toString(), reminderMessage);
+            //Tools.showError(getText(R.string.MainActivity_showError_method_Error).toString(), reminderMessage);
             Tools.showError(null, timeValue);
         } else {
             serviceCheck(view);
@@ -124,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * this method delete all error message, create new intent object and start reminder service
+     *
      * @param view object with user interface
      */
     public void startReminderService(View view) {

@@ -9,11 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.RemoteInput;
 
 import java.util.*;
 
@@ -38,8 +38,9 @@ public class ReminderService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         notificationAboutService();
+
         userReminder = createReminder(createReminderIntent(), intent);
-        initTimer(createTimerTask(),intent);
+        initTimer(createTimerTask(), intent);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -54,7 +55,7 @@ public class ReminderService extends Service {
 
     private TimerTask createTimerTask() {
 
-         return new TimerTask() {
+        return new TimerTask() {
             @Override
             public void run() {
 
@@ -76,6 +77,9 @@ public class ReminderService extends Service {
      */
     private PendingIntent createReminderIntent() {
 
+        /*Toast.makeText(getApplicationContext(), "createReminderIntent",
+                Toast.LENGTH_LONG).show();*/
+
         Intent handleClick = new Intent(this, MainActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         handleClick.setAction(ACTION_ANSWER);
@@ -85,8 +89,11 @@ public class ReminderService extends Service {
     }
 
 
+    /**
+     * this method create new notification about running service
+     */
     private void notificationAboutService() {
-
+        Log.d("+++", "foreground is started");
         Notification.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder = new Notification.Builder(getApplicationContext(), initNotificationChannel().getId());
@@ -95,7 +102,9 @@ public class ReminderService extends Service {
         }
         builder.setContentTitle(getString(R.string.app_name))
                 .setAutoCancel(true);
+
         startForeground(1, builder.build());
+        Log.d("+++", "foreground is started");
     }
 
     /**
@@ -107,16 +116,16 @@ public class ReminderService extends Service {
      */
     private Notification createReminder(PendingIntent secondPedIntent, Intent intent) {
 
+
         NotificationCompat.Builder reminder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setDescription(NOTIFICATION_CHANNEL_DESCRIPTION);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.BLUE);
-            NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
             reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId());
-
 
 
             // change notification without create new activity or without opening already created activity
@@ -152,11 +161,13 @@ public class ReminderService extends Service {
             //_____________________________________________________________________________________________
 
 
-
-
-        }else{
+        } else {
             reminder = new NotificationCompat.Builder(getApplicationContext());
         }
+
+       /* Toast.makeText(getApplicationContext(), "createReminder",
+                Toast.LENGTH_LONG).show();*/
+
         return reminder
                 .setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
                 .setContentTitle(getString(R.string.app_name))
@@ -166,6 +177,11 @@ public class ReminderService extends Service {
 
     }
 
+    /**
+     * this method create new notification chanel for notification about running service
+     *
+     * @return new notification channel
+     */
     private NotificationChannel initNotificationChannel() {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
