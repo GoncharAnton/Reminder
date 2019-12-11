@@ -34,4 +34,10 @@ public class Constants {
 
     public static final String USER_SETTING_TIME_VALUE_KEY = "sharedPreferencesTimeValueKey";
 
+    public static final String SHARED_PREFERENCES_FILE_NAME = "userSettings";
+
+    public static final String EMPTY_STRING = "";
+
+    public static final String ACTION_NAME = "com.gonchar.project.reminder.service.NEW_MESSAGE";
+
 }

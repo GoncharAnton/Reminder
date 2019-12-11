@@ -1,4 +1,4 @@
-package com.gonchar.project.reminder;
+package com.gonchar.project.reminder.service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -7,13 +7,19 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.RemoteInput;
+
+import com.gonchar.project.reminder.MainActivity;
+import com.gonchar.project.reminder.R;
+import com.gonchar.project.reminder.receiver.RestartService;
 
 import java.util.*;
 
@@ -41,6 +47,14 @@ public class ReminderService extends Service {
 
         userReminder = createReminder(createReminderIntent(), intent);
         initTimer(createTimerTask(), intent);
+
+        Bundle results = RemoteInput.getResultsFromIntent(intent);
+        if (results != null) {
+            CharSequence replyText = results.getCharSequence(REMOTE_KEY);
+            Log.d("+++",replyText.toString() );
+
+        }
+
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -77,10 +91,7 @@ public class ReminderService extends Service {
      */
     private PendingIntent createReminderIntent() {
 
-        /*Toast.makeText(getApplicationContext(), "createReminderIntent",
-                Toast.LENGTH_LONG).show();*/
-
-        Intent handleClick = new Intent(this, MainActivity.class)
+        Intent handleClick = new Intent(this, RestartService.class)//MainActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         handleClick.setAction(ACTION_ANSWER);
         handleClick.putExtra(QUICK_NOTIFICATION_CHANGE, 123);
@@ -93,7 +104,7 @@ public class ReminderService extends Service {
      * this method create new notification about running service
      */
     private void notificationAboutService() {
-        Log.d("+++", "foreground is started");
+
         Notification.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder = new Notification.Builder(getApplicationContext(), initNotificationChannel().getId());
@@ -116,7 +127,7 @@ public class ReminderService extends Service {
      */
     private Notification createReminder(PendingIntent secondPedIntent, Intent intent) {
 
-
+        SharedPreferences setting = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         NotificationCompat.Builder reminder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
@@ -124,57 +135,56 @@ public class ReminderService extends Service {
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.BLUE);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationManager != null;
             notificationManager.createNotificationChannel(notificationChannel);
-            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId());
 
-
-            // change notification without create new activity or without opening already created activity
-            //_this part dose`t work yet____________________________________________________________________________________________
-
-
-            /*RemoteInput userInput = new RemoteInput.Builder(REMOTE_KEY)
-                    .setLabel("Change message").build();
-
-
-            NotificationCompat.Action notificationButton = new NotificationCompat.Action.Builder
-                    (R.mipmap.ic_error_outline_black_18dp,"Change message",createReminderIntent())
-                    .addRemoteInput(userInput)
-                    .build();
-
-
-
+            NotificationCompat.Action action = createAction();
             reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId())
-            .addAction(notificationButton);
+                    .addAction(action);
 
-            Bundle resulr = RemoteInput.getResultsFromIntent(intent);
-            if (intent.getAction() != null) {
-                        intent.putExtra(EXTRAS_MESSAGE_KEY,"11111111111111");
-                userReminder = createReminder(createReminderIntent(), intent);
-                initTimer(createTimerTask(),intent);
-                createReminder(secondPedIntent, intent);
-                return reminder.setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
-                        .setContentTitle(getString(R.string.app_name))
-                        .setContentText(intent.getCharSequenceExtra("11111111111111"))
-                        .setContentIntent(secondPedIntent)
-                        .build();
-            }*/
-            //_____________________________________________________________________________________________
+            sendBroadcast(new Intent("com.gonchar.project.reminder.Action"));
 
-
-        } else {
+        }else{
+            //noinspection deprecation
             reminder = new NotificationCompat.Builder(getApplicationContext());
         }
-
-       /* Toast.makeText(getApplicationContext(), "createReminder",
-                Toast.LENGTH_LONG).show();*/
 
         return reminder
                 .setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText(intent.getCharSequenceExtra(EXTRAS_MESSAGE_KEY))
+                .setContentText(setting.getString(SHARED_PREFERENCES_REMINDER_KEY, EMPTY_STRING))
                 .setContentIntent(secondPedIntent)
                 .build();
 
+    }
+
+    /**
+     * this method used in createReminder method. Create new action ( create for change reminder ) consist of the action button
+     * and text field for input new reminder
+     *
+     * @return new action class object
+     */
+    private NotificationCompat.Action createAction() {
+
+        Intent handleClick = new Intent("com.gonchar.project.reminder.Action")//MainActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        handleClick.putExtra(QUICK_NOTIFICATION_CHANGE, 123);
+        PendingIntent forAction = PendingIntent.getActivity(getApplicationContext(),
+                123, handleClick, FILL_IN_ACTION);
+
+        return new NotificationCompat.Action.Builder(R.mipmap.ic_error_outline_black_18dp, "changes", forAction)
+                .addRemoteInput(createRemoteInput()).build();
+    }
+
+    /**
+     * this method used in new action, which create for change user notification. Create text field for change reminder notification
+     *
+     * @return remote input object
+     */
+    private androidx.core.app.RemoteInput createRemoteInput() {
+        return new androidx.core.app.RemoteInput.Builder(REMOTE_KEY)
+                .setLabel("new notification")
+                .build();
     }
 
     /**
@@ -196,6 +206,9 @@ public class ReminderService extends Service {
         }
         return channel;
     }
+
+
+
 
     /**
      * this method stop this service

@@ -9,8 +9,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 
+import com.gonchar.project.reminder.service.ReminderService;
 import com.gonchar.project.reminder.utils.Tools;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -67,13 +69,13 @@ public class MainActivity extends AppCompatActivity {
      * wos closet but service wos`t stop
      */
     private void checkUserSetting() {
-        userVariable = getSharedPreferences("userVar", MODE_PRIVATE);
+        userVariable = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
 
         if (userVariable.contains(SHARED_PREFERENCES_REMINDER_KEY)) {
-            reminderMessage.getEditText().setText(userVariable.getString(SHARED_PREFERENCES_REMINDER_KEY, ""));
+            reminderMessage.getEditText().setText(userVariable.getString(SHARED_PREFERENCES_REMINDER_KEY, EMPTY_STRING));
         }
         if (userVariable.contains(USER_SETTING_TIME_VALUE_KEY)) {
-            timeValue.getEditText().setText(userVariable.getString(USER_SETTING_TIME_VALUE_KEY, ""));
+            timeValue.getEditText().setText(userVariable.getString(USER_SETTING_TIME_VALUE_KEY, EMPTY_STRING));
         }
     }
 
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             changeUserSetting("", "");
             stopService(new Intent(view.getContext(), ReminderService.class));
         }
+
     }
 
     /**
@@ -121,17 +124,16 @@ public class MainActivity extends AppCompatActivity {
         if (Tools.isEmptyMessage(timeValue.getEditText().getText().toString()) ||
                 Tools.shouldShowError(MIN_TIME_VALUE, Integer.parseInt(timeValue.getEditText().getText().toString()))) {
             Tools.showError(getText(R.string.MainActivity_onClickForOnButton_argumentInShowErrorMethod_timeValueError).toString(), timeValue);
-            Tools.showError(null, reminderMessage);
         } else if (Tools.shouldShowError(MIN_MESSAGE_LENGTH, reminderMessage.getEditText().length())) {
-            //Tools.showError(getText(R.string.MainActivity_showError_method_Error).toString(), reminderMessage);
             Tools.showError(null, timeValue);
+            //Log.d("error", "this variable");
         } else {
             serviceCheck(view);
         }
     }
 
     /**
-     * this method start or restart reminder service (check service, is it work in this moment or not)
+     * this method stat or restart reminder service (check service, is it work in this moment or not)
      * if service is working - calls the stopService method (stop service) then startReminderService
      * method (start with new parameters), if service ist work - calls the tartReminderService method
      * (start with new parameters)
@@ -157,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public void startReminderService(View view) {
 
-        Tools.showError(null, reminderMessage);
         Tools.showError(null, timeValue);
         Intent intent = new Intent(view.getContext(), ReminderService.class)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)

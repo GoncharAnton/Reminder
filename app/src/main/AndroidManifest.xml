@@ -3,8 +3,8 @@
     package="com.gonchar.project.reminder"
     android:installLocation="internalOnly">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
 
     <application
@@ -17,7 +17,15 @@
         android:theme="@style/AppTheme">
 
         <receiver
-            android:name="com.gonchar.project.reminder.AutoBootReceiver">
+            android:name=".receiver.RestartService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.gonchar.project.reminder.Action"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receiver.AutoBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -27,7 +35,7 @@
         </receiver>
 
         <service
-            android:name=".ReminderService"
+            android:name=".service.ReminderService"
             android:enabled="true"
             android:exported="true" />
 

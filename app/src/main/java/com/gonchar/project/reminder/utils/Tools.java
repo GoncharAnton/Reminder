@@ -2,6 +2,7 @@ package com.gonchar.project.reminder.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+
 import androidx.appcompat.app.ActionBar;
 
 import com.gonchar.project.reminder.R;
@@ -9,6 +10,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 
 import static android.content.Context.ACTIVITY_SERVICE;
+
 
 public class Tools {
 
@@ -72,5 +74,6 @@ public class Tools {
     public static boolean shouldShowError(int constantValue, int usersValue) {
         return usersValue < constantValue;
     }
+
 
 }
