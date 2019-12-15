@@ -28,13 +28,9 @@ public class AutoBootReceiver extends BroadcastReceiver {
 
         if (Objects.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-                Log.d("myapp", intent.getStringExtra(EXTRAS_MESSAGE_KEY) == null ? "intent is empty" : "intent has some things");
-
                 context.startForegroundService(serviceIntent);
             } else {
                 context.startService(serviceIntent);
-
             }
         }
         throw new UnsupportedOperationException("Not yet implemented");

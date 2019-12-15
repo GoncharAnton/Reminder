@@ -38,6 +38,6 @@ public class Constants {
 
     public static final String EMPTY_STRING = "";
 
-    public static final String ACTION_NAME = "com.gonchar.project.reminder.service.NEW_MESSAGE";
+    public static final String ACTION_NAME = "com.gonchar.project.reminder.Action";
 
 }

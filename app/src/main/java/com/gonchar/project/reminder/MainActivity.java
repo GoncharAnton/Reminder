@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickForOffButton(View view) {
         if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
-            changeUserSetting("", "");
+            changeUserSetting(EMPTY_STRING, EMPTY_STRING);
             stopService(new Intent(view.getContext(), ReminderService.class));
         }
 
@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(SHARED_PREFERENCES_REMINDER_KEY, newReminder);
         editor.putString(USER_SETTING_TIME_VALUE_KEY, newTimeValue);
         editor.apply();
-
     }
 
 
@@ -126,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
             Tools.showError(getText(R.string.MainActivity_onClickForOnButton_argumentInShowErrorMethod_timeValueError).toString(), timeValue);
         } else if (Tools.shouldShowError(MIN_MESSAGE_LENGTH, reminderMessage.getEditText().length())) {
             Tools.showError(null, timeValue);
-            //Log.d("error", "this variable");
         } else {
             serviceCheck(view);
         }
@@ -142,12 +140,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void serviceCheck(View view) {
 
+        changeUserSetting(reminderMessage.getEditText().getText().toString(),
+                timeValue.getEditText().getText().toString());
         if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
             stopService(new Intent(view.getContext(), ReminderService.class));
             startReminderService(view);
         } else {
-            changeUserSetting(reminderMessage.getEditText().getText().toString(),
-                    timeValue.getEditText().getText().toString());
             startReminderService(view);
         }
     }
@@ -164,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(EXTRAS_MESSAGE_KEY, Objects.requireNonNull(reminderMessage.getEditText()).getText())
                 .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(Objects.requireNonNull(timeValue.getEditText()).getText().toString()));
+        intent.setAction(ACTION_NAME);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent);
 

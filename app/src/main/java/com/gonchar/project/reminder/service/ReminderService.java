@@ -44,17 +44,8 @@ public class ReminderService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         notificationAboutService();
-
-        userReminder = createReminder(createReminderIntent(), intent);
+        userReminder = createReminder(createReminderIntent());
         initTimer(createTimerTask(), intent);
-
-        Bundle results = RemoteInput.getResultsFromIntent(intent);
-        if (results != null) {
-            CharSequence replyText = results.getCharSequence(REMOTE_KEY);
-            Log.d("+++",replyText.toString() );
-
-        }
-
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -80,9 +71,11 @@ public class ReminderService extends Service {
                 }
                 assert messageManager != null;
                 messageManager.notify(2, userReminder);
+
             }
         };
     }
+
 
     /**
      * this method create new pending intent (used for created notification (reminder message))
@@ -91,9 +84,8 @@ public class ReminderService extends Service {
      */
     private PendingIntent createReminderIntent() {
 
-        Intent handleClick = new Intent(this, RestartService.class)//MainActivity.class)
+        Intent handleClick = new Intent(this, MainActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        handleClick.setAction(ACTION_ANSWER);
         handleClick.putExtra(QUICK_NOTIFICATION_CHANGE, 123);
         return PendingIntent.getActivity(getApplicationContext(),
                 123, handleClick, FILL_IN_ACTION);
@@ -122,10 +114,9 @@ public class ReminderService extends Service {
      * this method create new notification and return it in onStartCommand method
      *
      * @param secondPedIntent it is pendingIntent value
-     * @param intent          it is intent value which has user message
      * @return notification with user value in onStartCommand method
      */
-    private Notification createReminder(PendingIntent secondPedIntent, Intent intent) {
+    private Notification createReminder(PendingIntent secondPedIntent) {
 
         SharedPreferences setting = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         NotificationCompat.Builder reminder;
@@ -139,10 +130,9 @@ public class ReminderService extends Service {
             notificationManager.createNotificationChannel(notificationChannel);
 
             NotificationCompat.Action action = createAction();
-            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId())
+            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId()) //
                     .addAction(action);
-
-            sendBroadcast(new Intent("com.gonchar.project.reminder.Action"));
+            //Bundle results = RemoteInput.getResultsFromIntent(intent);
 
         }else{
             //noinspection deprecation
@@ -166,13 +156,11 @@ public class ReminderService extends Service {
      */
     private NotificationCompat.Action createAction() {
 
-        Intent handleClick = new Intent("com.gonchar.project.reminder.Action")//MainActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        handleClick.putExtra(QUICK_NOTIFICATION_CHANGE, 123);
-        PendingIntent forAction = PendingIntent.getActivity(getApplicationContext(),
-                123, handleClick, FILL_IN_ACTION);
+        Intent restartServiceIntent = new Intent(this, RestartService.class);
+        restartServiceIntent.setAction(ACTION_NAME);
 
-        return new NotificationCompat.Action.Builder(R.mipmap.ic_error_outline_black_18dp, "changes", forAction)
+        return new NotificationCompat.Action.Builder(R.mipmap.ic_error_outline_black_18dp, "changes", PendingIntent.getActivity(getApplicationContext(),
+                123, restartServiceIntent, FILL_IN_ACTION))
                 .addRemoteInput(createRemoteInput()).build();
     }
 
@@ -206,9 +194,6 @@ public class ReminderService extends Service {
         }
         return channel;
     }
-
-
-
 
     /**
      * this method stop this service
