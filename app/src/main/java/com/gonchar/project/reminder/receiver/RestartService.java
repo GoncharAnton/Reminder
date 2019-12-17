@@ -16,20 +16,22 @@ import static com.gonchar.project.reminder.utils.Constants.EXTRAS_MESSAGE_KEY;
 import static com.gonchar.project.reminder.utils.Constants.EXTRAS_TIME_VALUE_KEY;
 import static com.gonchar.project.reminder.utils.Constants.SHARED_PREFERENCES_FILE_NAME;
 import static com.gonchar.project.reminder.utils.Constants.SHARED_PREFERENCES_REMINDER_KEY;
-import static com.gonchar.project.reminder.utils.Constants.USER_SETTING_TIME_VALUE_KEY;
+import static com.gonchar.project.reminder.utils.Constants.SHARED_PREFERENCES_TIME_VALUE_KEY;
 
 public class RestartService extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Log.d("+++", "intent " + intent.getAction());
+
         SharedPreferences settings = context.getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         Intent serviceIntent = new Intent(context, ReminderService.class)
                 .putExtra(EXTRAS_MESSAGE_KEY, settings.getString(SHARED_PREFERENCES_REMINDER_KEY, EMPTY_STRING))
-                .putExtra(EXTRAS_TIME_VALUE_KEY, settings.getString(USER_SETTING_TIME_VALUE_KEY, EMPTY_STRING));
+                .putExtra(EXTRAS_TIME_VALUE_KEY, settings.getString(SHARED_PREFERENCES_TIME_VALUE_KEY, EMPTY_STRING));
 
         Log.d("Bundle","It is reminder : " + settings.getString(SHARED_PREFERENCES_REMINDER_KEY, EMPTY_STRING));
-        Log.d("Bundle","It is time value : " + settings.getString(USER_SETTING_TIME_VALUE_KEY, EMPTY_STRING));
+        Log.d("Bundle","It is time value : " + settings.getString(SHARED_PREFERENCES_TIME_VALUE_KEY, EMPTY_STRING));
 
         Log.d("Bundle","It is intent reminder : " + serviceIntent.getStringExtra(EXTRAS_MESSAGE_KEY));
         Log.d("Bundle","It is intent time value : " + serviceIntent.getStringExtra(EXTRAS_TIME_VALUE_KEY));

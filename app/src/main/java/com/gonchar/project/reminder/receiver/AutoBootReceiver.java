@@ -20,10 +20,12 @@ public class AutoBootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Log.d("+++", "onReceive: " + intent.getAction());
+
         SharedPreferences settings = context.getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         Intent serviceIntent = new Intent(context, ReminderService.class)
                 .putExtra(EXTRAS_MESSAGE_KEY, settings.getString(SHARED_PREFERENCES_REMINDER_KEY, EMPTY_STRING))
-                .putExtra(EXTRAS_TIME_VALUE_KEY, settings.getString(USER_SETTING_TIME_VALUE_KEY, EMPTY_STRING));
+                .putExtra(EXTRAS_TIME_VALUE_KEY, settings.getString(SHARED_PREFERENCES_TIME_VALUE_KEY, EMPTY_STRING));
 
 
         if (Objects.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {

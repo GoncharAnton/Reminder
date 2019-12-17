@@ -2,6 +2,7 @@ package com.gonchar.project.reminder.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.appcompat.app.ActionBar;
 
@@ -9,6 +10,7 @@ import com.gonchar.project.reminder.R;
 import com.google.android.material.textfield.TextInputLayout;
 
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.ACTIVITY_SERVICE;
 
 
@@ -24,17 +26,7 @@ public class Tools {
         return message.isEmpty();
     }
 
-    /**
-     * this method change default toolbar
-     * in this version print label (app name) in the middle of toolbar
-     *
-     * @param actionBar it is default toolbar
-     */
-    public static void makeCustomToolBar(ActionBar actionBar) {
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setCustomView(R.layout.toolbar);
-    }
+
 
     /**
      * This method check is service is work or not
@@ -45,7 +37,11 @@ public class Tools {
      */
     public static boolean checkServiceRunning(String ServiceName, Context mainActivity) {
         ActivityManager manager = (ActivityManager) mainActivity.getSystemService(ACTIVITY_SERVICE);
-        assert manager != null;
+        //assert manager != null;
+        if (manager == null){
+            Log.e(TAG, "error: while get manager, manager is null");
+            return false;
+        }
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (ServiceName.equals(service.service.getClassName())) {
                 return true;

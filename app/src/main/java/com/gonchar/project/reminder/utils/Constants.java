@@ -32,7 +32,7 @@ public class Constants {
 
     public static final String SHARED_PREFERENCES_REMINDER_KEY = "sharedPreferencesReminderKey";
 
-    public static final String USER_SETTING_TIME_VALUE_KEY = "sharedPreferencesTimeValueKey";
+    public static final String SHARED_PREFERENCES_TIME_VALUE_KEY = "sharedPreferencesTimeValueKey";
 
     public static final String SHARED_PREFERENCES_FILE_NAME = "userSettings";
 

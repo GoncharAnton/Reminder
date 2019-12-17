@@ -5,7 +5,7 @@
     <string name="activity_main_descriptionForEditTextWithTimeValue">Enter time value (in second)</string>
     <string name="activity_main_onButtonLabel">ON</string>
     <string name="activity_main_offButtonLabel">Off</string>
-    <string name="MainActivity_showError_method_Error">Wrong text length(min length should be more 3 symbols)</string>
+    <string name="MainActivity_showError_method_Error_ReminderMessageError">Wrong text length(min length should be more 3 symbols)</string>
     <string name="MainActivity_onClickForOnButton_argumentInShowErrorMethod_timeValueError">Wrong time value</string>
     <string name="Console_notificationButtonLabel">Change</string>
 </resources>

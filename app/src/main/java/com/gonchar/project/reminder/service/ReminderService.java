@@ -32,7 +32,7 @@ public class ReminderService extends Service {
 
     private Notification userReminder;
     Timer reminderMessage = new Timer();
-    private NotificationChannel channel = null;
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -126,12 +126,10 @@ public class ReminderService extends Service {
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.BLUE);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            assert notificationManager != null;
-            notificationManager.createNotificationChannel(notificationChannel);
 
-            NotificationCompat.Action action = createAction();
-            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId()) //
-                    .addAction(action);
+            notificationManager.createNotificationChannel(notificationChannel);                                                  //this part doesn't work well
+            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId())                      // replay button created but cant update reminder message
+                    .addAction(createAction());                                                                                  // need to fix it!
             //Bundle results = RemoteInput.getResultsFromIntent(intent);
 
         }else{
@@ -158,6 +156,8 @@ public class ReminderService extends Service {
 
         Intent restartServiceIntent = new Intent(this, RestartService.class);
         restartServiceIntent.setAction(ACTION_NAME);
+        restartServiceIntent.putExtra("EXTRA_NOTIFICATION_ID", 0);
+        PendingIntent pi = PendingIntent.getBroadcast(this, 0, restartServiceIntent, 0);
 
         return new NotificationCompat.Action.Builder(R.mipmap.ic_error_outline_black_18dp, "changes", PendingIntent.getActivity(getApplicationContext(),
                 123, restartServiceIntent, FILL_IN_ACTION))
@@ -169,8 +169,8 @@ public class ReminderService extends Service {
      *
      * @return remote input object
      */
-    private androidx.core.app.RemoteInput createRemoteInput() {
-        return new androidx.core.app.RemoteInput.Builder(REMOTE_KEY)
+    private RemoteInput createRemoteInput() {
+        return new RemoteInput.Builder(REMOTE_KEY)
                 .setLabel("new notification")
                 .build();
     }
@@ -181,7 +181,7 @@ public class ReminderService extends Service {
      * @return new notification channel
      */
     private NotificationChannel initNotificationChannel() {
-
+        NotificationChannel channel ;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             channel = new NotificationChannel(SERVICE_CHANNEL_ID,
                     SERVICE_CHANNEL_NAME, NotificationManager.IMPORTANCE_NONE);
@@ -189,10 +189,10 @@ public class ReminderService extends Service {
             channel.enableLights(true);
             channel.enableVibration(false);
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            assert manager != null;
-            manager.createNotificationChannel(channel);
+            manager.createNotificationChannel(channel);                                                          // fix it (write check for NulPointerException)
+            return channel;
         }
-        return channel;
+        return null;
     }
 
     /**
@@ -200,7 +200,6 @@ public class ReminderService extends Service {
      */
     @Override
     public void onDestroy() {
-
         reminderMessage.cancel();
         super.onDestroy();
     }
