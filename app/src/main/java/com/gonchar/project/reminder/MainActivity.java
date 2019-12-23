@@ -5,7 +5,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -25,12 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
     private TextInputLayout reminderMessage; // -
     private TextInputLayout timeValue; // -
-    PreferencesManager manager = new PreferencesManager();
+    PreferencesManager manager = PreferencesManager.init(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         setCustomToolBar(Objects.requireNonNull(getSupportActionBar()));
         initView();

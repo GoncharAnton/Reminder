@@ -66,10 +66,10 @@ public class ReminderService extends Service {
 
                 NotificationManager messageManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    assert messageManager != null;
+                    assert messageManager != null;                                                                // delete check for null!
                     messageManager.createNotificationChannel(initNotificationChannel());
                 }
-                assert messageManager != null;
+                assert messageManager != null;                                                                    // delete check for null!
                 messageManager.notify(2, userReminder);
 
             }
@@ -154,13 +154,12 @@ public class ReminderService extends Service {
      */
     private NotificationCompat.Action createAction() {
 
-        Intent restartServiceIntent = new Intent(this, RestartService.class);
+        Intent restartServiceIntent = new Intent(getApplicationContext(), RestartService.class);
         restartServiceIntent.setAction(ACTION_NAME);
         restartServiceIntent.putExtra("EXTRA_NOTIFICATION_ID", 0);
-        PendingIntent pi = PendingIntent.getBroadcast(this, 0, restartServiceIntent, 0);
+        PendingIntent restartServicePendingIntent = PendingIntent.getBroadcast(this, 0, restartServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        return new NotificationCompat.Action.Builder(R.mipmap.ic_error_outline_black_18dp, "changes", PendingIntent.getActivity(getApplicationContext(),
-                123, restartServiceIntent, FILL_IN_ACTION))
+        return new NotificationCompat.Action.Builder(R.mipmap.ic_error_outline_black_18dp, "changes", restartServicePendingIntent)
                 .addRemoteInput(createRemoteInput()).build();
     }
 

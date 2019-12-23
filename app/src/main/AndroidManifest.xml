@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
 
     <application
-        android:name=".utils.PreferencesManager"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"

@@ -1,55 +1,70 @@
 package com.gonchar.project.reminder.utils;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import static com.gonchar.project.reminder.utils.Constants.EMPTY_STRING;
-import static com.gonchar.project.reminder.utils.Constants.SHARED_PREFERENCES_FILE_NAME;
+import static com.gonchar.project.reminder.utils.Constants.*;
 
-public class PreferencesManager extends Application {
+public class PreferencesManager {
 
-    public static Context context;
-    SharedPreferences userVariable ;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = this;
+    private SharedPreferences settings;
+    private static PreferencesManager instance;
+    private static Context context;
+
+    private PreferencesManager() {
+    }
+
+    /**
+     * this method check instance of the sharedPreference object (was sharedPreference object creating or not)
+     *
+     * @param appContext - application context
+     * @return preferenceManager object (if object was be creating - return already created object ,
+     * else will be create and return new object  )
+     */
+    public static PreferencesManager init(Context appContext) {
+        if (instance == null) {
+            Log.d("++", "create new SharedPreferences");
+            instance = new PreferencesManager();
+        }
+        Log.d("++", "here create  sharedPreference!");
+        context = appContext;
+        return instance;
     }
 
     /**
      * this method save user settings (text from text fields in reminderMassage and timeValue)
      *
-     * @param key  which shared preferences used for save user settings
+     * @param key        which shared preferences used for save user settings
      * @param preference last variant of user string
      */
-    public void putPreferences(String key, String preference){
-        SharedPreferences.Editor editor = userVariable.edit();
+    public void putPreferences(String key, String preference) {
+        SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, preference);
         editor.apply();
     }
 
     /**
-     *  this method check some user key(is the sharedPreferences contains some things from pair with this key)
+     * this method check some user key(is the sharedPreferences contains some things from pair with this key)
+     *
      * @param key for search preference
      * @return return true is  preference is finding, else return false
      */
-    public boolean contains(String key){
-        userVariable = context.getSharedPreferences(SHARED_PREFERENCES_FILE_NAME,MODE_PRIVATE);
-        return userVariable.contains(key);
+    public boolean contains(String key) {
+        settings = context.getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        return settings.contains(key);
     }
 
     /**
      * this method find and return user preferences if  sharedPreferences contains value? else return null
+     *
      * @param key for search preference
      * @return return string value if sharedPreferences contains some things from pair with this key, else - null
      */
-    public String getPreference(String key){
-        return userVariable.getString(key, EMPTY_STRING);
+    public String getPreference(String key) {
+        return settings.getString(key, EMPTY_STRING);
     }
-
 
 
 }

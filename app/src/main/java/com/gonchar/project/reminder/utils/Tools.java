@@ -4,9 +4,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.appcompat.app.ActionBar;
-
-import com.gonchar.project.reminder.R;
 import com.google.android.material.textfield.TextInputLayout;
 
 
@@ -37,7 +34,6 @@ public class Tools {
      */
     public static boolean checkServiceRunning(String ServiceName, Context mainActivity) {
         ActivityManager manager = (ActivityManager) mainActivity.getSystemService(ACTIVITY_SERVICE);
-        //assert manager != null;
         if (manager == null){
             Log.e(TAG, "error: while get manager, manager is null");
             return false;
