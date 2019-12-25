@@ -40,4 +40,8 @@ public class Constants {
 
     public static final String ACTION_NAME = "com.gonchar.project.reminder.Action";
 
+    public static final boolean DEFAULT_BOOLEAN_VALUE = false;
+
+    public static final String ACTIVITY_STATE = "activity_state";
+
 }

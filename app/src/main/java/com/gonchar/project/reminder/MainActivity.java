@@ -22,17 +22,46 @@ import static com.gonchar.project.reminder.utils.Constants.*;
 public class MainActivity extends AppCompatActivity {
 
 
-    private TextInputLayout reminderMessage; // -
-    private TextInputLayout timeValue; // -
-    PreferencesManager manager = PreferencesManager.init(this);
+    private PreferencesManager manager = PreferencesManager.init(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setCustomToolBar(Objects.requireNonNull(getSupportActionBar()));
-        initView();
         checkUserSetting();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        manager.putBooleanPreferences(ACTIVITY_STATE, false);
+        if (!manager.getStringPreference(SHARED_PREFERENCES_REMINDER_KEY)
+                .equals(((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().getText().toString())) {
+            ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().setText(manager.getStringPreference(SHARED_PREFERENCES_REMINDER_KEY));
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        manager.putBooleanPreferences(ACTIVITY_STATE, true);
+        ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().setText(manager.getStringPreference(SHARED_PREFERENCES_REMINDER_KEY));
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(EXTRAS_MESSAGE_KEY, ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().getText().toString());
+        outState.putString(EXTRAS_TIME_VALUE_KEY, ((TextInputLayout)findViewById(R.id.timeValue)).getEditText().getText().toString());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().setText(savedInstanceState.getString(EXTRAS_MESSAGE_KEY));
+        ((TextInputLayout)findViewById(R.id.timeValue)).getEditText().setText(savedInstanceState.getString(EXTRAS_TIME_VALUE_KEY));
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     /**
@@ -48,65 +77,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * this method initialize value
-     */
-    private void initView(){
-        reminderMessage = findViewById(R.id.reminderMessage);
-        timeValue = findViewById(R.id.timeValue);
-    }
-
-    /**
      * this method rewrite text field in TextInputLayouts reminderMessage and timeValue if application
      * wos closet but service wos`t stop
      */
     private void checkUserSetting() {
 
         if (manager.contains(SHARED_PREFERENCES_REMINDER_KEY)) {
-            reminderMessage.getEditText().setText(manager.getPreference(SHARED_PREFERENCES_REMINDER_KEY));
+            ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().setText(manager.getStringPreference(SHARED_PREFERENCES_REMINDER_KEY));
         }
         if (manager.contains(SHARED_PREFERENCES_TIME_VALUE_KEY)) {
-            timeValue.getEditText().setText(manager.getPreference(SHARED_PREFERENCES_TIME_VALUE_KEY));
+            ((TextInputLayout)findViewById(R.id.timeValue)).getEditText().setText(manager.getStringPreference(SHARED_PREFERENCES_TIME_VALUE_KEY));
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString(EXTRAS_MESSAGE_KEY, reminderMessage.getEditText().getText().toString());
-        outState.putString(EXTRAS_TIME_VALUE_KEY, timeValue.getEditText().getText().toString());
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        reminderMessage.getEditText().setText(savedInstanceState.getString(EXTRAS_MESSAGE_KEY));
-        timeValue.getEditText().setText(savedInstanceState.getString(EXTRAS_TIME_VALUE_KEY));
-        super.onRestoreInstanceState(savedInstanceState);
     }
 
     public void onClickForOffButton(View view) {
         if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
-            manager.putPreferences(SHARED_PREFERENCES_REMINDER_KEY,EMPTY_STRING);
-            manager.putPreferences(SHARED_PREFERENCES_TIME_VALUE_KEY,EMPTY_STRING);
+            manager.putStringPreferences(SHARED_PREFERENCES_REMINDER_KEY, EMPTY_STRING);
+            manager.putStringPreferences(SHARED_PREFERENCES_TIME_VALUE_KEY, EMPTY_STRING);
             stopService(new Intent(view.getContext(), ReminderService.class));
         }
     }
 
     public void onCLickForOnButton(View view) {
 
-        if(Tools.shouldShowError(MIN_MESSAGE_LENGTH, reminderMessage.getEditText().length())){
-            Tools.showError(getText(R.string.MainActivity_showError_method_Error_ReminderMessageError).toString(),reminderMessage);
-        }else{
-            Tools.showError(null, reminderMessage);
+        if (Tools.shouldShowError(MIN_MESSAGE_LENGTH, ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().length())) {
+            Tools.showError(getText(R.string.MainActivity_showError_method_Error_ReminderMessageError).toString(), ((TextInputLayout)findViewById(R.id.reminderMessage)));
+        } else {
+            Tools.showError(null, ((TextInputLayout)findViewById(R.id.reminderMessage)));
         }
-        if (Tools.isEmptyMessage(timeValue.getEditText().getText().toString()) ||
-                Tools.shouldShowError(MIN_TIME_VALUE, Integer.parseInt(timeValue.getEditText().getText().toString()))) {
-            Tools.showError(getText(R.string.MainActivity_onClickForOnButton_argumentInShowErrorMethod_timeValueError).toString(), timeValue);
-        } else if (Tools.shouldShowError(MIN_MESSAGE_LENGTH, reminderMessage.getEditText().length())) {
-            Tools.showError(null, timeValue);
+        if (Tools.isEmptyMessage(((TextInputLayout)findViewById(R.id.timeValue)).getEditText().getText().toString()) ||
+                Tools.shouldShowError(MIN_TIME_VALUE, Integer.parseInt(((TextInputLayout)findViewById(R.id.timeValue)).getEditText().getText().toString()))) {
+            Tools.showError(getText(R.string.MainActivity_onClickForOnButton_argumentInShowErrorMethod_timeValueError).toString(), ((TextInputLayout)findViewById(R.id.timeValue)));
+        } else if (Tools.shouldShowError(MIN_MESSAGE_LENGTH, ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().length())) {
+            Tools.showError(null, ((TextInputLayout)findViewById(R.id.timeValue)));
         } else {
             serviceCheck(view);
         }
     }
+
 
     /**
      * this method stat or restart reminder service (check service, is it work in this moment or not)
@@ -118,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void serviceCheck(View view) {
 
-        manager.putPreferences(SHARED_PREFERENCES_REMINDER_KEY, reminderMessage.getEditText().getText().toString());
-        manager.putPreferences(SHARED_PREFERENCES_TIME_VALUE_KEY,timeValue.getEditText().getText().toString());
+        manager.putStringPreferences(SHARED_PREFERENCES_REMINDER_KEY, ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().getText().toString());
+        manager.putStringPreferences(SHARED_PREFERENCES_TIME_VALUE_KEY, ((TextInputLayout)findViewById(R.id.timeValue)).getEditText().getText().toString());
         if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
             stopService(new Intent(view.getContext(), ReminderService.class));
         }
@@ -133,11 +141,12 @@ public class MainActivity extends AppCompatActivity {
      */
     public void startReminderService(View view) {
 
-        Tools.showError(null, timeValue);
+        Tools.showError(null, ((TextInputLayout)findViewById(R.id.timeValue)));
         Intent intent = new Intent(view.getContext(), ReminderService.class)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                .putExtra(EXTRAS_MESSAGE_KEY, Objects.requireNonNull(reminderMessage.getEditText()).getText())
-                .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(Objects.requireNonNull(timeValue.getEditText()).getText().toString()));
+                .putExtra(EXTRAS_MESSAGE_KEY, Objects.requireNonNull(((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText()).getText())
+                .putExtra(EXTRAS_TIME_VALUE_KEY, Integer.parseInt(Objects.requireNonNull(
+                        ((TextInputLayout)findViewById(R.id.timeValue)).getEditText()).getText().toString()));
         intent.setAction(ACTION_NAME);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent);

@@ -39,9 +39,21 @@ public class PreferencesManager {
      * @param key        which shared preferences used for save user settings
      * @param preference last variant of user string
      */
-    public void putPreferences(String key, String preference) {
+    public void putStringPreferences(String key, String preference) {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, preference);
+        editor.apply();
+    }
+
+    /**
+     * this method save user settings (boolean value which show is activity active or not)
+     *
+     * @param key        which shared preferences used for save user settings
+     * @param preference boolean value
+     */
+    public void putBooleanPreferences(String key, boolean preference) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(key, preference);
         editor.apply();
     }
 
@@ -62,9 +74,19 @@ public class PreferencesManager {
      * @param key for search preference
      * @return return string value if sharedPreferences contains some things from pair with this key, else - null
      */
-    public String getPreference(String key) {
+    public String getStringPreference(String key) {
         return settings.getString(key, EMPTY_STRING);
     }
 
+
+    /**
+     * this method find and return user preferences if  sharedPreferences contains value? else return null
+     *
+     * @param key for search preference
+     * @return return boolean value if sharedPreferences contains some things from pair with this key, else - null
+     */
+    public boolean getBooleanPreference(String key) {
+        return settings.getBoolean(key, DEFAULT_BOOLEAN_VALUE);
+    }
 
 }

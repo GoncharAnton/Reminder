@@ -20,6 +20,7 @@ import androidx.core.app.RemoteInput;
 import com.gonchar.project.reminder.MainActivity;
 import com.gonchar.project.reminder.R;
 import com.gonchar.project.reminder.receiver.RestartService;
+import com.gonchar.project.reminder.utils.PreferencesManager;
 
 import java.util.*;
 
@@ -30,9 +31,8 @@ import static com.gonchar.project.reminder.utils.Constants.*;
 public class ReminderService extends Service {
 
 
-    private Notification userReminder;
+    Notification userReminder;
     Timer reminderMessage = new Timer();
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -66,10 +66,8 @@ public class ReminderService extends Service {
 
                 NotificationManager messageManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    assert messageManager != null;                                                                // delete check for null!
                     messageManager.createNotificationChannel(initNotificationChannel());
                 }
-                assert messageManager != null;                                                                    // delete check for null!
                 messageManager.notify(2, userReminder);
 
             }
@@ -118,7 +116,7 @@ public class ReminderService extends Service {
      */
     private Notification createReminder(PendingIntent secondPedIntent) {
 
-        SharedPreferences setting = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        PreferencesManager settingManager = PreferencesManager.init(getApplicationContext());
         NotificationCompat.Builder reminder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
@@ -127,11 +125,9 @@ public class ReminderService extends Service {
             notificationChannel.setLightColor(Color.BLUE);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-            notificationManager.createNotificationChannel(notificationChannel);                                                  //this part doesn't work well
-            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId())                      // replay button created but cant update reminder message
-                    .addAction(createAction());                                                                                  // need to fix it!
-            //Bundle results = RemoteInput.getResultsFromIntent(intent);
-
+            notificationManager.createNotificationChannel(notificationChannel);
+            reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId())
+                    .addAction(createAction());
         }else{
             //noinspection deprecation
             reminder = new NotificationCompat.Builder(getApplicationContext());
@@ -140,7 +136,7 @@ public class ReminderService extends Service {
         return reminder
                 .setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText(setting.getString(SHARED_PREFERENCES_REMINDER_KEY, EMPTY_STRING))
+                .setContentText(settingManager.getStringPreference(SHARED_PREFERENCES_REMINDER_KEY))
                 .setContentIntent(secondPedIntent)
                 .build();
 
