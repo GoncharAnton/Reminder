@@ -7,24 +7,21 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
-import com.gonchar.project.reminder.MainActivity;
+import com.gonchar.project.reminder.Activitys.MainActivity;
 import com.gonchar.project.reminder.R;
 import com.gonchar.project.reminder.receiver.RestartService;
 import com.gonchar.project.reminder.utils.PreferencesManager;
 
 import java.util.*;
 
-import static android.content.Intent.ACTION_ANSWER;
 import static android.content.Intent.FILL_IN_ACTION;
 import static com.gonchar.project.reminder.utils.Constants.*;
 

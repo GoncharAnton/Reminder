@@ -1,4 +1,4 @@
-package com.gonchar.project.reminder;
+package com.gonchar.project.reminder.Activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import com.gonchar.project.reminder.R;
 import com.gonchar.project.reminder.service.ReminderService;
 import com.gonchar.project.reminder.utils.PreferencesManager;
 import com.gonchar.project.reminder.utils.Tools;
