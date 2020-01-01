@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import static android.content.ContentValues.TAG;
 import static com.gonchar.project.reminder.utils.Constants.*;
 
 public class PreferencesManager {
@@ -36,7 +37,7 @@ public class PreferencesManager {
     /**
      * this method save user settings (text from text fields in reminderMassage and timeValue)
      *
-     * @param key        which shared preferences used for save user settings
+     * @param key        - key which shared preferences used for save user settings
      * @param preference last variant of user string
      */
     public void putStringPreferences(String key, String preference) {
@@ -48,7 +49,7 @@ public class PreferencesManager {
     /**
      * this method save user settings (boolean value which show is activity active or not)
      *
-     * @param key        which shared preferences used for save user settings
+     * @param key        - key which shared preferences used for save user settings
      * @param preference boolean value
      */
     public void putBooleanPreferences(String key, boolean preference) {
@@ -60,7 +61,7 @@ public class PreferencesManager {
     /**
      * this method check some user key(is the sharedPreferences contains some things from pair with this key)
      *
-     * @param key for search preference
+     * @param key - key for search preference
      * @return return true is  preference is finding, else return false
      */
     public boolean contains(String key) {
@@ -71,22 +72,32 @@ public class PreferencesManager {
     /**
      * this method find and return user preferences if  sharedPreferences contains value? else return null
      *
-     * @param key for search preference
+     * @param key - key for search preference
      * @return return string value if sharedPreferences contains some things from pair with this key, else - null
      */
     public String getStringPreference(String key) {
-        return settings.getString(key, EMPTY_STRING);
+        if (contains(key)) {
+            return settings.getString(key, EMPTY_STRING);
+        } else {
+            Log.e(TAG, "error: value with key : '" + key + "' not found ");
+            return EMPTY_STRING;
+        }
     }
 
 
     /**
      * this method find and return user preferences if  sharedPreferences contains value? else return null
      *
-     * @param key for search preference
+     * @param key - key for search preference
      * @return return boolean value if sharedPreferences contains some things from pair with this key, else - null
      */
     public boolean getBooleanPreference(String key) {
-        return settings.getBoolean(key, DEFAULT_BOOLEAN_VALUE);
+        if (contains(key)) {
+            return settings.getBoolean(key, DEFAULT_BOOLEAN_VALUE);
+        } else {
+            Log.e(TAG, "error: value with kye : '" + key + "' not found ");
+            return false;
+        }
     }
 
 }

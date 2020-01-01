@@ -7,10 +7,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -24,7 +22,6 @@ import com.gonchar.project.reminder.utils.PreferencesManager;
 
 import java.util.*;
 
-import static android.content.Intent.ACTION_ANSWER;
 import static android.content.Intent.FILL_IN_ACTION;
 import static com.gonchar.project.reminder.utils.Constants.*;
 
@@ -105,7 +102,6 @@ public class ReminderService extends Service {
                 .setAutoCancel(true);
 
         startForeground(1, builder.build());
-        Log.d("+++", "foreground is started");
     }
 
     /**
@@ -117,15 +113,18 @@ public class ReminderService extends Service {
     private Notification createReminder(PendingIntent secondPedIntent) {
 
         PreferencesManager settingManager = PreferencesManager.init(getApplicationContext());
+        Log.d("+++", settingManager==null ? "settingManager == null": settingManager.getStringPreference(SHARED_PREFERENCES_REMINDER_KEY));
+
         NotificationCompat.Builder reminder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setDescription(NOTIFICATION_CHANNEL_DESCRIPTION);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.BLUE);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
+
             reminder = new NotificationCompat.Builder(getApplicationContext(), notificationChannel.getId())
                     .addAction(createAction());
         }else{
@@ -184,7 +183,7 @@ public class ReminderService extends Service {
             channel.enableLights(true);
             channel.enableVibration(false);
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.createNotificationChannel(channel);                                                          // fix it (write check for NulPointerException)
+            manager.createNotificationChannel(channel);
             return channel;
         }
         return null;

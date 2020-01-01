@@ -16,7 +16,7 @@ public class Tools {
     /**
      * this method check string variable
      *
-     * @param message it is variable for check
+     * @param message - variable for check
      * @return true if message is null or is empty
      */
     public static Boolean isEmptyMessage(String message) {
@@ -28,8 +28,8 @@ public class Tools {
     /**
      * This method check is service is work or not
      *
-     * @param ServiceName  name of service class
-     * @param mainActivity context value
+     * @param ServiceName  - name of service class
+     * @param mainActivity - context value
      * @return true if service was started
      */
     public static boolean checkServiceRunning(String ServiceName, Context mainActivity) {
@@ -49,8 +49,8 @@ public class Tools {
     /**
      * this method print error message under reminderMessage field
      *
-     * @param errorMessage it is string with error message
-     * @param InputLayout  TextInputLayout value (reminderMessage or timeValue field)
+     * @param errorMessage - string with error message
+     * @param InputLayout  - TextInputLayout value (reminderMessage or timeValue field)
      */
     public static void showError(String errorMessage, TextInputLayout InputLayout) {
         InputLayout.setError(errorMessage);
@@ -59,8 +59,8 @@ public class Tools {
     /**
      * This method compare two integer value constantValue & usersValue.
      *
-     * @param constantValue usually it is app constant value (min length of the string or min time value)
-     * @param usersValue    usually it is user value in reminder message or time value fields
+     * @param constantValue - usually it is app constant value (min length of the string or min time value)
+     * @param usersValue    - usually it is user value in reminder message or time value fields
      * @return true if users value larger or bigger of the constant value (then as constant value it is min value)
      */
     public static boolean shouldShowError(int constantValue, int usersValue) {
