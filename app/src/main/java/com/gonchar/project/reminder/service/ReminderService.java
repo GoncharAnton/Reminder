@@ -132,6 +132,7 @@ public class ReminderService extends Service {
             reminder = new NotificationCompat.Builder(getApplicationContext());
         }
 
+
         return reminder
                 .setSmallIcon(R.mipmap.ic_error_outline_black_18dp)
                 .setContentTitle(getString(R.string.app_name))

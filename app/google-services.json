@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "168298562380",
+    "firebase_url": "https://reminder-ff3fc.firebaseio.com",
+    "project_id": "reminder-ff3fc",
+    "storage_bucket": "reminder-ff3fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168298562380:android:0f5f8d270938a6060105e9",
+        "android_client_info": {
+          "package_name": "com.gonchar.project.reminder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168298562380-109gq2jqqkgg63ncq306iskf0au3jneb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsK739aLLxFyWuFDrsvjDvqz8JFpo-trk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168298562380-109gq2jqqkgg63ncq306iskf0au3jneb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
