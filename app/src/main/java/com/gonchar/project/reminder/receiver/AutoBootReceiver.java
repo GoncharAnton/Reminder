@@ -19,7 +19,7 @@ public class AutoBootReceiver extends BroadcastReceiver {
 
         PreferencesManager manager = PreferencesManager.init(context);
 
-        if (Objects.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {
+        if (Objects.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED) && manager.getBooleanPreference(SHARED_PREFERENCES_AUTO_START_KEY)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(intentCreator(context, manager));
             } else {

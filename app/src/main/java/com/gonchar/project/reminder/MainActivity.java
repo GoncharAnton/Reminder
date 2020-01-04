@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
             manager.putStringPreferences(SHARED_PREFERENCES_REMINDER_KEY, EMPTY_STRING);
             manager.putStringPreferences(SHARED_PREFERENCES_TIME_VALUE_KEY, EMPTY_STRING);
+            manager.putBooleanPreferences(SHARED_PREFERENCES_AUTO_START_KEY, false);
             stopService(new Intent(view.getContext(), ReminderService.class));
         }
     }
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
         manager.putStringPreferences(SHARED_PREFERENCES_REMINDER_KEY, ((TextInputLayout)findViewById(R.id.reminderMessage)).getEditText().getText().toString());
         manager.putStringPreferences(SHARED_PREFERENCES_TIME_VALUE_KEY, ((TextInputLayout)findViewById(R.id.timeValue)).getEditText().getText().toString());
+        manager.putBooleanPreferences(SHARED_PREFERENCES_AUTO_START_KEY, true);
         if (Tools.checkServiceRunning(ReminderService.class.getName(), view.getContext())) {
             stopService(new Intent(view.getContext(), ReminderService.class));
         }

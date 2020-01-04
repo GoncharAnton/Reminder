@@ -44,4 +44,6 @@ public class Constants {
 
     public static final String ACTIVITY_STATE = "activity_state";
 
+    public static final String SHARED_PREFERENCES_AUTO_START_KEY = "sharedPreferencesAutoStartKey";
+
 }
