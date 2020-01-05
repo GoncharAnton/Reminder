@@ -17,21 +17,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gonchar.project.reminder.activity.MainActivity" />
+        </activity>
 
         <receiver
             android:name=".receiver.RestartService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.gonchar.project.reminder.Action"/>
+                <action android:name="com.gonchar.project.reminder.Action" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".receiver.AutoBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -42,7 +50,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:launchMode="singleTop">
 
             <!-- android:taskAffinity="" -->

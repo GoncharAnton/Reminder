@@ -1,0 +1,38 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Part service -->
+    <PreferenceCategory app:title="@string/root_preferences_Service_header">
+        <SwitchPreferenceCompat
+            app:key="serviceOn"
+            app:title="@string/root_preferences_service_on_title"/>
+
+    </PreferenceCategory>
+
+    <!-- Part "theme" -->
+    <PreferenceCategory app:title="@string/root_preferences_theme_header">
+        <SwitchPreferenceCompat
+            app:key="NightTheme"
+            app:title="@string/root_preferences_nightTheme_title" />
+
+    </PreferenceCategory>
+
+    <!-- Part "About" -->
+    <PreferenceCategory app:title="@string/root_preferences_about_header">
+        <EditTextPreference
+            app:key="aboutApp"
+            app:summary="@string/root_preferences_aboutApp_summary"
+            app:title="@string/root_preferences_aboutApp_title" />
+
+        <EditTextPreference
+            app:key="aboutVersion"
+            app:summary="@string/root_preferences_aboutVersion_summary"
+            app:title="@string/root_preferences_aboutVersion_title" />
+
+        <EditTextPreference
+            app:key="aboutAuthor"
+            app:title="@string/root_preferences_aboutAuthor_title"
+            app:summary="@string/root_preferences_aboutAuthor_summary_first"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

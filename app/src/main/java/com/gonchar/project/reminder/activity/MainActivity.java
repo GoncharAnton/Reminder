@@ -1,4 +1,4 @@
-package com.gonchar.project.reminder;
+package com.gonchar.project.reminder.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
+import com.gonchar.project.reminder.R;
 import com.gonchar.project.reminder.service.ReminderService;
 import com.gonchar.project.reminder.utils.PreferencesManager;
 import com.gonchar.project.reminder.utils.Tools;
@@ -29,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setCustomToolBar(Objects.requireNonNull(getSupportActionBar()));
+        View.OnClickListener setting = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), SettingsActivity.class));
+            }
+        };
+        findViewById(R.id.settingsButton).setOnClickListener(setting);
         checkUserSetting();
     }
 
@@ -74,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(R.layout.toolbar);
+
     }
 
     /**

@@ -15,7 +15,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
-import com.gonchar.project.reminder.MainActivity;
+import com.gonchar.project.reminder.activity.MainActivity;
 import com.gonchar.project.reminder.R;
 import com.gonchar.project.reminder.receiver.RestartService;
 import com.gonchar.project.reminder.utils.PreferencesManager;

@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.gonchar.project.reminder.MainActivity;
+import com.gonchar.project.reminder.activity.MainActivity;
 import com.gonchar.project.reminder.service.ReminderService;
 import com.gonchar.project.reminder.utils.PreferencesManager;
 

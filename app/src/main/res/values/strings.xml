@@ -8,4 +8,43 @@
     <string name="MainActivity_showError_method_Error_ReminderMessageError">Wrong text length(min length should be more 3 symbols)</string>
     <string name="MainActivity_onClickForOnButton_argumentInShowErrorMethod_timeValueError">Wrong time value</string>
     <string name="Console_notificationButtonLabel">Change</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="toolbar_xml_ImageButton_contentDescription_start_SettingActivity_class">start SettingsActivity.class</string>
+
+    <!-- Preference Titles (header of settings) -->
+    <string name="root_preferences_Service_header">Service</string>
+    <string name="root_preferences_theme_header">Theme</string>
+    <string name="root_preferences_about_header">About</string>
+
+    <!-- Messages Preferences (title of settings) -->
+    <string name="root_preferences_aboutApp_title">Application</string>
+    <string name="root_preferences_aboutVersion_title">Version</string>
+    <string name="root_preferences_aboutAuthor_title">About author</string>
+    <string name="root_preferences_nightTheme_title">Night theme</string>
+    <string name="root_preferences_service_on_title">Service On</string>
+
+
+    <!-- Messages Preferences (summary of settings) -->
+    <string name="root_preferences_aboutApp_summary">This application help remember important information.\n
+        All what you need to do - write massage in future(write reminder text and indicate the
+        time value after which necessary need remember something important). You will receive a notification on device.</string>
+    <string name="root_preferences_aboutVersion_summary">1.0</string>
+    <string name="root_preferences_aboutAuthor_summary_first">author : Honchar Anton\n
+         mail : honchar.anton.dev@gmail.com\n
+         Ukraine Kropyvnytskyi 2020</string>
+
+    <!-- _____________________DELETE____________________________________ -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+    <!-- _____________________END_DELETE____________________________________ -->
+
+
+
+
+    <!-- Sync Preferences (SettingActivity.class) -->
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
 </resources>
