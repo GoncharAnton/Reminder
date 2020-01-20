@@ -46,4 +46,12 @@ public class Constants {
 
     public static final String SHARED_PREFERENCES_AUTO_START_KEY = "sharedPreferencesAutoStartKey";
 
+    public static final String ON_SERVICE_KEY = "serviceOn";
+
+    public static final String SWITCH_THEME_SETTING_KEY = "switchTheme";
+
+    public static final String KEY_FOR_CHANGE_MAIN = "flagMainActivity";
+
+    public static final String KEY_FOT_CHANGE_SETTING = "flagSettingPreference";
+
 }

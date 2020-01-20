@@ -1,37 +1,45 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Part service -->
     <PreferenceCategory app:title="@string/root_preferences_Service_header">
         <SwitchPreferenceCompat
+            android:id="@+id/setting_serviceOn"
+            android:onClick="serviceSwitch"
             app:key="serviceOn"
-            app:title="@string/root_preferences_service_on_title"/>
+            app:title="@string/root_preferences_service_on_title"
+            app:defaultValue="false"/>
 
     </PreferenceCategory>
 
     <!-- Part "theme" -->
     <PreferenceCategory app:title="@string/root_preferences_theme_header">
         <SwitchPreferenceCompat
-            app:key="NightTheme"
-            app:title="@string/root_preferences_nightTheme_title" />
+            android:id="@+id/switchTheme"
+            app:key="switchTheme"
+            app:title="Dark theme"
+            app:defaultValue="true"/>
 
     </PreferenceCategory>
 
     <!-- Part "About" -->
     <PreferenceCategory app:title="@string/root_preferences_about_header">
-        <EditTextPreference
+        <Preference
             app:key="aboutApp"
             app:summary="@string/root_preferences_aboutApp_summary"
             app:title="@string/root_preferences_aboutApp_title" />
 
-        <EditTextPreference
+        <Preference
             app:key="aboutVersion"
             app:summary="@string/root_preferences_aboutVersion_summary"
             app:title="@string/root_preferences_aboutVersion_title" />
 
-        <EditTextPreference
+        <Preference
+            android:icon="@mipmap/ic_mail_outline_black_48dp"
+            app:iconSpaceReserved="false"
             app:key="aboutAuthor"
-            app:title="@string/root_preferences_aboutAuthor_title"
-            app:summary="@string/root_preferences_aboutAuthor_summary_first"/>
+            app:summary="@string/root_preferences_aboutAuthor_summary_first"
+            app:title="@string/root_preferences_aboutAuthor_title" />
 
     </PreferenceCategory>
 
